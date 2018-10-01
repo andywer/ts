@@ -1,0 +1,40 @@
+{
+  "name": "ts",
+  "version": "0.0.0",
+  "license": "MIT",
+  "description": "The CLI client that TypeScript deserves.",
+  "author": "Andy Wermke (https://github.com/andywer)",
+  "repository": "github:andywer/ts",
+  "bin": "./dist/cli.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "tslint --project .",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "cli",
+    "typescript"
+  ],
+  "devDependencies": {
+    "prettier": "^1.14.3",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "^3.1.1"
+  },
+  "optionalDependencies": {
+    "tslint": "5.*"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "meow": "^5.0.0"
+  }
+}
