@@ -1,4 +1,5 @@
 import typescript from "typescript"
+import { Options } from "./options"
 
 const tsconfigDefaults = {
   options: {
@@ -15,12 +16,12 @@ const tsconfigDefaults = {
 
 const dedupe = <T>(array: T[]): T[] => Array.from(new Set(array))
 
-export function getCompilerOptions (cliFlags: any, packageJsonData: any) {
+export function getCompilerOptions (cliFlags: any, options: Options, packageJsonData: any) {
   const packageJsonConfig = packageJsonData.ts || {}
 
   const compilerOptions = {
     ...tsconfigDefaults.options,
-    ...(packageJsonConfig.compilerOptions ? packageJsonConfig.compilerOptions : {})
+    ...(packageJsonConfig.compilerOptions || {})
   }
 
   if (cliFlags.declaration) {
@@ -50,7 +51,7 @@ export function getCompilerOptions (cliFlags: any, packageJsonData: any) {
   if (cliFlags.target) {
     compilerOptions.target = cliFlags.target
   }
-  if (cliFlags.monorepo) {
+  if (options.monorepo) {
     compilerOptions.paths = {
       ...compilerOptions.paths,
       "*": dedupe([
