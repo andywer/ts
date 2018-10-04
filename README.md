@@ -47,6 +47,7 @@ Options
   --skip-lib-check      Don't type-check declaration files (*.d.ts).
   --source-maps         Create source maps.
   --target, -t <target> Set target: ES5, ES2015, ..., ESNext
+  --typings-dir <path>  Set the custom 3rd-party module declaration directory. Defaults to "typings/".
   --version             Print version.
 
 Almost all options can be set in the package.json file, so you don't need to pass them on invocation.
@@ -90,15 +91,12 @@ This is a `tsconfig.json` that resembles the default options:
       /* Any compiler options */
     },
     "emit": {
-      "tsconfig": boolean,
-      "tslint": boolean
+      "tsconfig": boolean
     },
     "include": [
       /* Source files (entrypoints) */
     ],
-    "tslint": {
-      /* TSLint configuration */
-    }
+    "typingsDirectory": "./typings"
   }
 }
 ```

@@ -6,8 +6,8 @@ import { compileOnce } from "./compiler"
 import { createOrUpdateJSON } from "./json-update"
 import { getOptions } from "./options"
 import { locatePackageJson, readPackageJson } from "./package-json"
-import { getSourceGlobs, resolveGlobs } from "./sources"
-import { getCompilerOptions, parseCompilerOptions } from "./tsconfig"
+import { getAlwaysIncludeGlobs, getSourceGlobs, resolveGlobs } from "./sources"
+import { getCompilerOptions, getIncludes, parseCompilerOptions } from "./tsconfig"
 
 const helpText = `
 Usage
@@ -32,6 +32,7 @@ Options
   --skip-lib-check      Don't type-check declaration files (*.d.ts).
   --source-maps         Create source maps.
   --target, -t <target> Set target: ES5, ES2015, ..., ESNext
+  --typings-dir <path>  Set the custom 3rd-party module declaration directory. Defaults to "typings/".
   --version             Print version.
 
 Almost all options can be set in the package.json file, so you don't need to pass them on invocation.
@@ -102,11 +103,11 @@ async function run () {
   if (options.emitTSConfig) {
     await createOrUpdateJSON("tsconfig.json", {
       compilerOptions: compilerOptionsJson,
-      include: options.include
+      include: getIncludes(cli.input, options)
     })
   }
 
-  const globs = getSourceGlobs(cli.input, options)
+  const globs = getSourceGlobs(cli.input, options).concat(getAlwaysIncludeGlobs(options))
   const filePaths = await resolveGlobs(globs)
 
   if (filePaths.length === 0) {

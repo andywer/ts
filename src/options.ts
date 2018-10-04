@@ -10,10 +10,12 @@ export function getOptions (cliFlags: any, packageJsonData: any) {
   const emitTSConfig = Boolean(cliFlags.emitTsconfig || (packageJsonConfig.emit && packageJsonConfig.emit.tsconfig))
   const include = packageJsonConfig.include || undefined
   const monorepo = cliFlags.monorepo || packageJsonConfig.monorepo
+  const typingsDirectory = cliFlags.typingsDir || packageJsonConfig.typingsDirectory || "./typings"
 
   return {
     emitTSConfig,
     include,
-    monorepo
+    monorepo,
+    typingsDirectory
   }
 }

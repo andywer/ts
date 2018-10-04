@@ -1,4 +1,5 @@
 import globByCallback from "glob"
+import * as path from "path"
 import { Options } from "./options"
 
 const defaultSourceGlobs = [
@@ -12,7 +13,7 @@ const glob = (pattern: string) => new Promise<string[]>(
   (resolve, reject) => globByCallback(pattern, (error, result) => error ? reject(error): resolve(result))
 )
 
-export function getSourceGlobs (cliArguments: string[], options: Options = {}) {
+export function getSourceGlobs (cliArguments: string[], options: Options) {
   if (cliArguments.length > 0) {
     return cliArguments
   } else if (options.include) {
@@ -20,6 +21,12 @@ export function getSourceGlobs (cliArguments: string[], options: Options = {}) {
   }
 
   return defaultSourceGlobs
+}
+
+export function getAlwaysIncludeGlobs (options: Options) {
+  return [
+    path.join(options.typingsDirectory, "**", "*.d.ts")
+  ]
 }
 
 export async function resolveGlobs (globs: string[]) {

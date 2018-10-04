@@ -1,5 +1,6 @@
 import typescript from "typescript"
 import { Options } from "./options"
+import { getAlwaysIncludeGlobs } from "./sources"
 
 const tsconfigDefaults = {
   options: {
@@ -71,4 +72,12 @@ export function getCompilerOptions (cliFlags: any, options: Options, packageJson
 export function parseCompilerOptions (compilerOptions: any) {
   const parsed = typescript.parseJsonConfigFileContent({ compilerOptions }, typescript.sys, ".")
   return parsed.options
+}
+
+export function getIncludes (cliArgs: string[], options: Options) {
+  return dedupe([
+    ...cliArgs,
+    ...options.include,
+    ...getAlwaysIncludeGlobs(options)
+  ])
 }
