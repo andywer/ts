@@ -25,7 +25,13 @@ export function getSourceGlobs (cliArguments: string[], options: Options) {
 
 export function getAlwaysIncludeGlobs (options: Options) {
   return [
-    path.join(options.typingsDirectory, "**", "*.d.ts")
+    path.join(options.typingsDirectory, "**", "*.d.ts"),
+    path.join("node_modules", "@*", "types-*", "*.d.ts"),
+    ...(
+      options.monorepo
+      ? [ path.join("..", "..", "node_modules", "@*", "types-*", "*.d.ts") ]
+      : []
+    )
   ]
 }
 

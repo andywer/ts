@@ -96,7 +96,7 @@ function fail (message: string): never {
 async function run () {
   const packageJsonData = await readJsonFile(locatePackageJson() || fail("Could not locate package.json file."))
   const tsconfigJsonPath = locateTSConfigJson()
-  const tsconfigJsonData = tsconfigJsonPath ? await readJsonFile(tsconfigJsonPath) : tsconfigJsonPath
+  const tsconfigJsonData = tsconfigJsonPath ? await readJsonFile(tsconfigJsonPath) : {}
 
   const options = getOptions(cli.flags, packageJsonData, tsconfigJsonData)
   const compilerOptionsJson = getCompilerOptions(cli.flags, options, packageJsonData, tsconfigJsonData)
