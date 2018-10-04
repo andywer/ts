@@ -40,8 +40,6 @@ Options
   --help                Print this help.
   --jsx <option>        Enable JSX support in TSX files. Set to "react", "react-native" or "preserve".
   --lib <...lib>        Set features available at runtime: ES5, ES2015, ..., DOM, WebWorker, ...
-  --lint                Run tslint. Uses configuration from package.json or tslint.json.
-  --lint <...config>    Run tslint, <config> can be "latest" or a tslint-config-<config> package.
   --monorepo            Indicates a monorepo package. Will look for types in package and monorepo root.
   --no-strict           Disable strict mode.
   --out-dir, -o <path>  Set the output directory. Defaults to dist/.
@@ -49,7 +47,6 @@ Options
   --skip-lib-check      Don't type-check declaration files (*.d.ts).
   --source-maps         Create source maps.
   --target, -t <target> Set target: ES5, ES2015, ..., ESNext
-  --watch, -w           Watch and re-run on file changes.
   --version             Print version.
 
 Almost all options can be set in the package.json file, so you don't need to pass them on invocation.
