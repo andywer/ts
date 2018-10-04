@@ -5,7 +5,7 @@ import typescript from "typescript"
 import { compileOnce } from "./compiler"
 import { createOrUpdateJSON } from "./json-update"
 import { getOptions } from "./options"
-import { locatePackageJson, readPackageJson } from "./package-json"
+import { locatePackageJson, locateTSConfigJson, readJsonFile } from "./json-files"
 import { getAlwaysIncludeGlobs, getSourceGlobs, resolveGlobs } from "./sources"
 import { getCompilerOptions, getIncludes, parseCompilerOptions } from "./tsconfig"
 
@@ -94,10 +94,12 @@ function fail (message: string): never {
 }
 
 async function run () {
-  const packageJsonData = await readPackageJson(locatePackageJson() || fail("Could not locate package.json file."))
-  const options = getOptions(cli.flags, packageJsonData)
+  const packageJsonData = await readJsonFile(locatePackageJson() || fail("Could not locate package.json file."))
+  const tsconfigJsonPath = locateTSConfigJson()
+  const tsconfigJsonData = tsconfigJsonPath ? await readJsonFile(tsconfigJsonPath) : tsconfigJsonPath
 
-  const compilerOptionsJson = getCompilerOptions(cli.flags, options, packageJsonData)
+  const options = getOptions(cli.flags, packageJsonData, tsconfigJsonData)
+  const compilerOptionsJson = getCompilerOptions(cli.flags, options, packageJsonData, tsconfigJsonData)
   const compilerOptions = parseCompilerOptions(compilerOptionsJson)
 
   if (options.emitTSConfig) {

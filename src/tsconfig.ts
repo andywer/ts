@@ -17,11 +17,13 @@ const tsconfigDefaults = {
 
 const dedupe = <T>(array: T[]): T[] => Array.from(new Set(array))
 
-export function getCompilerOptions (cliFlags: any, options: Options, packageJsonData: any) {
+export function getCompilerOptions (cliFlags: any, options: Options, packageJsonData: any, tsconfigJsonData: any = null) {
   const packageJsonConfig = packageJsonData.ts || {}
+  const tsconfigJson = { compilerOptions: {}, ...tsconfigJsonData }
 
   const compilerOptions = {
     ...tsconfigDefaults.options,
+    ...tsconfigJson.compilerOptions,
     ...(packageJsonConfig.compilerOptions || {})
   }
 
@@ -77,7 +79,7 @@ export function parseCompilerOptions (compilerOptions: any) {
 export function getIncludes (cliArgs: string[], options: Options) {
   return dedupe([
     ...cliArgs,
-    ...options.include,
+    ...(options.include || []),
     ...getAlwaysIncludeGlobs(options)
   ])
 }
