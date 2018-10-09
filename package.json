@@ -8,6 +8,7 @@
   "bin": "./dist/cli.js",
   "scripts": {
     "build": "tsc",
+    "build:pkg": "pkg .",
     "test": "tslint --project .",
     "prepare": "npm run build"
   },
@@ -20,6 +21,7 @@
     "@types/glob": "^7.1.1",
     "@types/meow": "^4.0.1",
     "@types/node": "^10.11.3",
+    "pkg": "^4.3.4",
     "prettier": "^1.14.3",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
