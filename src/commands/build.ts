@@ -39,6 +39,8 @@ See <https://github.com/andywer/ts> for CLI details.
 See <https://www.typescriptlang.org/docs/handbook/compiler-options.html> for compiler options details.
 `
 
+const dedupe = <T>(array: T[]): T[] => Array.from(new Set(array))
+
 const formatHost: typescript.FormatDiagnosticsHost = {
   getCanonicalFileName: path => path,
   getCurrentDirectory: typescript.sys.getCurrentDirectory,
@@ -66,15 +68,24 @@ export async function run (cli: CLI) {
     })
   }
 
-  const globs = getSourceGlobs(cli.input, options).concat(getAlwaysIncludeGlobs(options))
-  const filePaths = await resolveGlobs(globs)
+  const sourceGlobs = dedupe([
+    ...getSourceGlobs(cli.input, options),
+    ...options.include
+  ])
+  const allInputGlobs = dedupe([
+    ...getAlwaysIncludeGlobs(options),
+    ...sourceGlobs
+  ])
 
-  if (filePaths.length === 0) {
-    fail(`No matching source files found: ${globs.join(", ")}`)
+  const allInputFilePaths = await resolveGlobs(allInputGlobs)
+  const sourceFilePaths = await resolveGlobs(sourceGlobs)
+
+  if (sourceFilePaths.length === 0) {
+    fail(`No matching source files found: ${sourceGlobs.join(", ")}`)
   }
 
   const startingTime = Date.now()
-  const { diagnostics, result } = compileOnce(filePaths, compilerOptions)
+  const { diagnostics, result } = compileOnce(allInputFilePaths, compilerOptions)
   // TODO: Support watch mode
 
   if (result.emitSkipped) {
