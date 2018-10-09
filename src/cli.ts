@@ -16,7 +16,7 @@ Usage
   $ ts --target es2018 src/**/*.ts
 
   Create tsconfig.json
-  $ ts --declaration --emit-tsconfig
+  $ ts --emit-tsconfig [<...options>]
 
   Show this help text
   $ ts --help
