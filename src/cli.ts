@@ -122,10 +122,10 @@ async function run () {
 
   if (result.emitSkipped) {
     console.error("Build failed:")
-    console.error(typescript.formatDiagnostics(diagnostics, formatHost))
+    console.error(typescript.formatDiagnosticsWithColorAndContext(diagnostics, formatHost))
     process.exit(1)
   } else {
-    console.log(typescript.formatDiagnostics(diagnostics, formatHost))
+    console.log(typescript.formatDiagnosticsWithColorAndContext(diagnostics, formatHost))
     console.log(`Compiled in ${((Date.now() - startingTime) / 1000).toFixed(1)}s`)
   }
 }
