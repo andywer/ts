@@ -23,6 +23,8 @@ Usage
 
 Commands
   build                 Compile a TypeScript project. Default command.
+  compile               Alias of "build".
+  search                Search for a type declarations package on npm.
 
 General options
   --help                Print this help.
