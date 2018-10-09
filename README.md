@@ -1,59 +1,63 @@
 # ts - The CLI that TypeScript deserves
 
-Putting an end to complicated setups and inconvenient idiosyncrasies. Start your next TypeScript project with a smile on your face, not by copy-and-pasting `ts*.json` files.
+Putting an end to a complicated setup and inconvenient idiosyncrasies. Start your next TypeScript project with a smile on your face, not by copy-and-pasting `tsconfig.json` files.
 
 
 ## Starting a new project
 
-Run the TypeScript compiler with `ts` best practice options - no `tsconfig.json` needed!
+Run the TypeScript compiler with modern best practice options:
 
 ```sh
 npx ts --out-dir <path> <...entrypoint files>
 ```
 
-"But now my IDE complains, even though ts compiles just fine" - No problem, we've got you covered.
+Does not require a `tsconfig.json` file, but will act according to its options if found.
 
-Just emit the TypeScript configuration into a `tsconfig.json` file, so your IDE and other packages know what's going on.
+If your source files are in `src/` and you want to write the output files to `dist/`, you don't even need to set anything:
+
+```sh
+npx ts
+```
+
+Run with `--emit-tsconfig` to create a `tsconfig.json` file.
 
 ```sh
 npm ts --emit-tsconfig
 ```
-
-Many people prefer not to have several configuration files in their repository root. You can put custom compiler options and linting configuration in the `package.json` file (see **Configuration in `package.json`**), set the `emit` options to `true` and add the `ts*.json` files to your `.gitignore` - Done!
+```sh
+npm ts --declaration --emit-tsconfig --target es2016
+```
 
 
 ## Usage
 
 ```
 Usage
-  $ ts --out-dir <path> <...entrypoint files>
-  $ ts [--declaration] [--emit-tsconfig] [--lint] [--out-dir <path>] [<...entrypoint files>]
+  General usage
+  $ ts <command> [<...options>]
 
-Arguments
-  Pass any glob pattern(s) of the files to compile, like 'src/**/*.ts' or '!src/**/*.test.(ts|tsx)'.
-  You only need to pass the entrypoints of your program.
+  Compile project in current directory
+  $ ts [build]
 
-Options
-  --declaration         Create declaration files (*.d.ts) in output directory. Defaults to true.
-  --emit-tsconfig       Create/update tsconfig.json file.
-  --emit-tslint         Create/update tslint.json file.
+  Compile with altered options
+  $ ts --target es2018 src/**/*.ts
+
+  Create tsconfig.json
+  $ ts --declaration --emit-tsconfig
+
+  Show this help text
+  $ ts --help
+
+Commands
+  build                 Compile a TypeScript project. Default command.
+  compile               Alias of "build".
+  search                Search for a type declarations package on npm.
+
+General options
   --help                Print this help.
-  --jsx <option>        Enable JSX support in TSX files. Set to "react", "react-native" or "preserve".
-  --lib <...lib>        Set features available at runtime: ES5, ES2015, ..., DOM, WebWorker, ...
-  --monorepo            Indicates a monorepo package. Will look for types in package and monorepo root.
-  --no-strict           Disable strict mode.
-  --out-dir, -o <path>  Set the output directory. Defaults to dist/.
-  --out-module <type>   Set the output module type: "commonjs" (default), "es2015", "umd", ...
-  --skip-lib-check      Don't type-check declaration files (*.d.ts).
-  --source-maps         Create source maps.
-  --target, -t <target> Set target: ES5, ES2015, ..., ESNext
-  --typings-dir <path>  Set the custom 3rd-party module declaration directory. Defaults to "typings/".
   --version             Print version.
 
-Almost all options can be set in the package.json file, so you don't need to pass them on invocation.
-
-See <https://github.com/andywer/ts> for CLI details.
-See <https://www.typescriptlang.org/docs/handbook/compiler-options.html> for compiler options details.
+See <https://github.com/andywer/ts> for details.
 ```
 
 
@@ -81,8 +85,30 @@ This is a `tsconfig.json` that resembles the default options:
 }
 ```
 
+## Monorepo support
+
+Run `ts` with `--monorepo` or set the `monorepo` option in the `package.json` file (see below).
+
+This will make `ts` look for packages not only in `./node_modules/`, but also in `../../node_modules/` (the monorepo root directory's `node_modules`). It will also look for type declaration packages and custom local type declarations in the monorepo root.
+
+
+## Custom type package support
+
+By default `ts` will look for type declaration packages not only in `node_modules/@types/*`, but also in `node_modules/@*/types-*`.
+
+That allows you to easily publish your custom type declarations to npm under the scope of your npm user name without going through all the overhead of Definitely Typed.
+
+Use the `ts search` command to find type declaration packages on npm:
+
+```sh
+$ ts search koa
+# Will list all packages matching "@types/*" or "@*/types-*", and "koa"
+```
+
 
 ## Configuration in `package.json`
+
+You can also set all `ts` options and TypeScript `compilerOptions` in your `package.json`:
 
 ```ts
 {
@@ -90,16 +116,16 @@ This is a `tsconfig.json` that resembles the default options:
     "compilerOptions": {
       /* Any compiler options */
     },
-    "emit": {
-      "tsconfig": boolean
-    },
     "include": [
       /* Source files (entrypoints) */
     ],
+    "monorepo": boolean,
     "typingsDirectory": "./typings"
   }
 }
 ```
+
+**Experimental:** Allows you to `.gitignore` your `tsconfig.json` file altogether.
 
 
 ## License
