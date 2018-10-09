@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import meow from "meow"
-import * as commands from "./commands/index"
 import { Commands } from "./commands/_types"
+import * as commands from "./commands/index"
 
 const helpText = `
 Usage

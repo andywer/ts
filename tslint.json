@@ -9,6 +9,7 @@
       true,
       "never-prefix"
     ],
+    "no-console": false,
     "no-implicit-dependencies": [
       true,
       "dev"
