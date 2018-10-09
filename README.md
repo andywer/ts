@@ -1,17 +1,32 @@
-# ts - The CLI that TypeScript deserves
+# ts
 
-Putting an end to a complicated setup and inconvenient idiosyncrasies. Start your next TypeScript project with a smile on your face, not by copy-and-pasting `tsconfig.json` files.
+The CLI that TypeScript deserves.
 
 
-## Starting a new project
+## Installation
 
-Run the TypeScript compiler with modern best practice options:
+Locally:
+
+```sh
+$ npm install --save-dev ts
+```
+
+Globally:
+
+```sh
+$ npm install --global ts
+```
+
+
+## Quick start
+
+Run the TypeScript compiler with `ts` default best practice options:
 
 ```sh
 npx ts --out-dir <path> <...entrypoint files>
 ```
 
-Does not require a `tsconfig.json` file, but will act according to its options if found.
+Compiling using `ts` does not require a `tsconfig.json` file, but `ts` will act according to its options if found.
 
 If your source files are in `src/` and you want to write the output files to `dist/`, you don't even need to set anything:
 
@@ -61,6 +76,27 @@ See <https://github.com/andywer/ts> for details.
 ```
 
 
+## Monorepo support
+
+Run `ts` with `--monorepo` or set the `monorepo` option in the `package.json` file (see below).
+
+This will make `ts` look for packages not only in `./node_modules/`, but also in `../../node_modules/` (the monorepo root directory's `node_modules`). It will also look for type declaration packages and custom local type declarations in the monorepo root.
+
+
+## Custom type package support
+
+By default `ts` will look for type declaration packages not only in `node_modules/@types/*`, but also in `node_modules/@*/types-*`.
+
+That allows you to easily publish your custom type declarations to npm under the scope of your npm user name without going through all the overhead of Definitely Typed.
+
+Use the `ts search` command to find type declaration packages on npm:
+
+```sh
+$ ts search koa
+# Will list all packages matching "@types/*" or "@*/types-*", and "koa"
+```
+
+
 ## Defaults
 
 In contrast to `tsc` behavior, `ts` lets you override options set in the `package.json` or `tsconfig.json` selectively using command line arguments. Yes, you heard right, `tsc` will ignore your `tsconfig.json` once you set a single option via command line 🤦‍
@@ -83,26 +119,6 @@ This is a `tsconfig.json` that resembles the default options:
     "<entrypoint file path>"
   ]
 }
-```
-
-## Monorepo support
-
-Run `ts` with `--monorepo` or set the `monorepo` option in the `package.json` file (see below).
-
-This will make `ts` look for packages not only in `./node_modules/`, but also in `../../node_modules/` (the monorepo root directory's `node_modules`). It will also look for type declaration packages and custom local type declarations in the monorepo root.
-
-
-## Custom type package support
-
-By default `ts` will look for type declaration packages not only in `node_modules/@types/*`, but also in `node_modules/@*/types-*`.
-
-That allows you to easily publish your custom type declarations to npm under the scope of your npm user name without going through all the overhead of Definitely Typed.
-
-Use the `ts search` command to find type declaration packages on npm:
-
-```sh
-$ ts search koa
-# Will list all packages matching "@types/*" or "@*/types-*", and "koa"
 ```
 
 
