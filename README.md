@@ -150,7 +150,7 @@ You can also set all `ts` options and TypeScript `compilerOptions` in your `pack
 
 ```ts
 {
-  "typescript": {
+  "ts": {
     "compilerOptions": {
       /* Any compiler options */
     },
@@ -158,6 +158,9 @@ You can also set all `ts` options and TypeScript `compilerOptions` in your `pack
       /* Source files (entrypoints) */
     ],
     "monorepo": boolean,
+    "transforms": [
+      /* Transformations (package name or local path) */
+    ],
     "typingsDirectory": "./typings"
   }
 }

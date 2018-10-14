@@ -45,6 +45,9 @@ export function getCompilerOptions (cliFlags: any, options: Options, packageJson
   if (cliFlags.outModule) {
     compilerOptions.module = cliFlags.outModule
   }
+  if (cliFlags.rootDir) {
+    compilerOptions.rootDir = cliFlags.rootDir
+  }
   if (cliFlags.skipLibCheck) {
     compilerOptions.skipLibCheck = true
   }

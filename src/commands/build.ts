@@ -1,3 +1,4 @@
+import * as path from "path"
 import typescript from "typescript"
 import { compileOnce } from "../compiler"
 import { locatePackageJson, locateTSConfigJson, readJsonFile } from "../json-files"
@@ -28,9 +29,11 @@ Options
   --no-strict           Disable strict mode.
   --out-dir, -o <path>  Set the output directory. Defaults to dist/.
   --out-module <type>   Set the output module type: "commonjs" (default), "es2015", "umd", ...
+  --root-dir <path>     Set the source directory. Used to
   --skip-lib-check      Don't type-check declaration files (*.d.ts).
   --source-maps         Create source maps.
   --target, -t <target> Set target: ES5, ES2015, ..., ESNext
+  --transform <module>  Enable custom TypeScript transformation. Pass a package name or relative module path.
   --typings-dir <path>  Set the custom 3rd-party module declaration directory. Defaults to "typings/".
 
 TS options and compiler options can be set in the package.json file, too.
@@ -50,6 +53,10 @@ const formatHost: typescript.FormatDiagnosticsHost = {
 function fail (message: string): never {
   console.error(message)
   return process.exit(1)
+}
+
+function filePathIsIn (filePath: string, dirPath: string) {
+  return path.resolve(filePath).startsWith(path.resolve(dirPath))
 }
 
 export async function run (cli: CLI) {
@@ -83,9 +90,13 @@ export async function run (cli: CLI) {
   if (sourceFilePaths.length === 0) {
     fail(`No matching source files found: ${sourceGlobs.join(", ")}`)
   }
+  if (typeof compilerOptions.rootDir && sourceFilePaths.some(filePath => !filePathIsIn(filePath, compilerOptions.rootDir as string))) {
+    console.error(`Warning: Some source files are not located within the specified source root directory (${compilerOptions.rootDir}). Disabling the source root directory compiler option.`)
+    compilerOptions.rootDir = undefined
+  }
 
   const startingTime = Date.now()
-  const { diagnostics, result } = compileOnce(allInputFilePaths, compilerOptions)
+  const { diagnostics, result } = compileOnce(allInputFilePaths, compilerOptions, options)
   // TODO: Support watch mode
 
   if (result.emitSkipped) {
