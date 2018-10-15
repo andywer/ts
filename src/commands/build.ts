@@ -93,7 +93,7 @@ export async function run (cli: CLI) {
   if (sourceFilePaths.length === 0) {
     fail(`No matching source files found: ${sourceGlobs.join(", ")}`)
   }
-  if (typeof compilerOptions.rootDir && sourceFilePaths.some(filePath => !filePathIsIn(filePath, compilerOptions.rootDir as string))) {
+  if (compilerOptions.rootDir && sourceFilePaths.some(filePath => !filePathIsIn(filePath, compilerOptions.rootDir as string))) {
     console.error(`Warning: Some source files are not located within the specified source root directory (${compilerOptions.rootDir}). Disabling the source root directory compiler option.`)
     compilerOptions.rootDir = undefined
   }
