@@ -10,7 +10,9 @@ function loadCustomTransformations (options: Options) {
   }
 
   return options.transformations.map((modulePath: string) => {
-    const module: any = require(modulePath)
+    const module: any = modulePath.match(/^\.\.?\//)
+      ? require(path.join(process.cwd(), modulePath))
+      : require(modulePath)
     const transformer: Transformation = module && module.default ? module.default : module
     return transformer
   })
