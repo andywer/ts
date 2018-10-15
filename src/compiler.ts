@@ -9,8 +9,8 @@ function loadCustomTransformations (options: Options) {
     return []
   }
 
-  return options.transformations.map(modulePath => {
-    const module: any = require(path.join(process.cwd(), modulePath))
+  return options.transformations.map((modulePath: string) => {
+    const module: any = require(modulePath)
     const transformer: Transformation = module && module.default ? module.default : module
     return transformer
   })
