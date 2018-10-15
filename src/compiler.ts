@@ -5,7 +5,9 @@ import { Options } from "./options"
 type Transformation = (options?: any, program?: typescript.Program) => typescript.TransformerFactory<typescript.SourceFile>
 
 function loadCustomTransformations (options: Options) {
-  if (!options.transformations) return []
+  if (!options.transformations) {
+    return []
+  }
 
   return options.transformations.map(modulePath => {
     const module: any = require(path.join(process.cwd(), modulePath))

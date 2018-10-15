@@ -45,7 +45,7 @@ See <https://www.typescriptlang.org/docs/handbook/compiler-options.html> for com
 const dedupe = <T>(array: T[]): T[] => Array.from(new Set(array))
 
 const formatHost: typescript.FormatDiagnosticsHost = {
-  getCanonicalFileName: path => path,
+  getCanonicalFileName: filePath => filePath,
   getCurrentDirectory: typescript.sys.getCurrentDirectory,
   getNewLine: () => typescript.sys.newLine
 }
@@ -69,10 +69,13 @@ export async function run (cli: CLI) {
   const compilerOptions = parseCompilerOptions(compilerOptionsJson)
 
   if (options.emitTSConfig) {
-    await createOrUpdateJSON("tsconfig.json", {
+    const tsConfigCreated = await createOrUpdateJSON("tsconfig.json", {
       compilerOptions: compilerOptionsJson,
       include: getIncludes(cli.input, options)
     })
+    if (tsConfigCreated) {
+      console.log("Created tsconfig.json file.")
+    }
   }
 
   const sourceGlobs = dedupe([

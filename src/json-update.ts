@@ -24,7 +24,8 @@ export async function createOrUpdateJSON (filePath: string, jsonData: any) {
   try {
     await stat(filePath)
   } catch (error) {
-    return writeFile(filePath, JSON.stringify(jsonData, null, 2))
+    await writeFile(filePath, JSON.stringify(jsonData, null, 2))
+    return true
   }
 
   const updater = createUpdater(filePath)
@@ -43,4 +44,5 @@ export async function createOrUpdateJSON (filePath: string, jsonData: any) {
       }
     })
   )
+  return false
 }
