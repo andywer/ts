@@ -77,7 +77,7 @@ export async function run (cli: CLI) {
 
   const sourceGlobs = dedupe([
     ...getSourceGlobs(cli.input, options),
-    ...options.include
+    ...(options.include || [])
   ])
   const allInputGlobs = dedupe([
     ...getAlwaysIncludeGlobs(options),
